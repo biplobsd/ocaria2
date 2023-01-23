@@ -28,7 +28,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install --upgrade setuptools wheel
           pip install git+https://github.com/pyinstaller/pyinstaller.git
-          pip install pyunpack patool
+          pip install pyunpack patool requests
     
     - name: Get dependencies aria2 and ariangwke
       run: python3 .\.ci\dependency.py ${{ matrix.platfromType }}
