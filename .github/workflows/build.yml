@@ -1,0 +1,45 @@
+name: Build ocaria2
+on: 
+  workflow_dispatch:
+
+jobs:
+  Bulid:
+    name: Build ${{ matrix.name }}
+    strategy:
+      max-parallel: 2
+      fail-fast: false
+      matrix:
+        include:
+          - arch: 'x86'
+            platfromType: 0
+          - arch: 'x64'
+            platfromType: 1
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+        architecture: ${{ matrix.arch }}
+
+    - name: Install requirements
+      run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade setuptools wheel
+          pip install git+https://github.com/pyinstaller/pyinstaller.git
+          pip install pyunpack patool
+    
+    - name: Get dependencies aria2 and ariangwke
+      run: python3 .\.ci\dependency.py ${{ matrix.platfromType }}
+    
+    - name: Build with pyinstaller for ${{matrix.arch}}
+      run: pyinstaller ocaria2.spec
+      
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: package_windows_${{ matrix.arch }}
+        path: ./dist/   
+    
+    

@@ -9,8 +9,8 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=[
-        ('aria2-1.36.0-win-64bit-build1', 'aria2-1.36.0-win-64bit-build1'),
-         ('AriaNgWke-Win64', 'AriaNgWke-Win64')
+        ('aria2', 'aria2'),
+         ('AriaNgWke', 'AriaNgWke')
     ],
     hiddenimports=[],
     hookspath=[],

@@ -7,13 +7,13 @@ from multiprocessing import Process
 
 
 def run_ariangwke():
-    cwd = 'AriaNgWke-Win64/'
+    cwd = 'AriaNgWke/'
     subprocess.Popen(["AriaNg"], cwd=cwd, shell=True)
 
 
 def run_aria2c():
     OUTPUT_DIR = './'
-    cwd = 'aria2-1.36.0-win-64bit-build1/'
+    cwd = 'aria2/'
     trackers = requests.get(
         "https://trackerslist.com/best_aria2.txt"
     ).text
