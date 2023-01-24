@@ -38,11 +38,16 @@ jobs:
     
     - name: Build with pyinstaller for ${{matrix.arch}}
       run: pyinstaller ocaria2.spec
-      
+
+    - name: 7z output files
+      uses: edgarrc/action-7z@v1
+      with:
+        args: 7z a -t7z -mx=9 build.7z ./dist/
+  
     - name: Upload artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: package_windows_${{ matrix.arch }}
-        path: ./dist/   
+        path: ./build.7z   
     
     

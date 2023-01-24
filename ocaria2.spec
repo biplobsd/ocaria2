@@ -29,7 +29,7 @@ exe = EXE(
     a.datas,
     [],
     name='ocaria2',
-    debug=True,
+    debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
