@@ -1,22 +1,27 @@
 import multiprocessing
 import signal
 import subprocess
-import requests
 import os
 from multiprocessing import Process
+from urllib import request
+from urllib import error
 
 
 def run_ariangwke():
-    cwd = 'AriaNgWke/'
+    cwd = os.path.join('tools', 'AriaNgWke')
     subprocess.Popen(["AriaNg"], cwd=cwd, shell=True)
 
 
 def run_aria2c():
-    OUTPUT_DIR = './'
-    cwd = 'aria2/'
-    trackers = requests.get(
-        "https://trackerslist.com/best_aria2.txt"
-    ).text
+    OUTPUT_DIR = os.path.join(os.getcwd(), 'downloads')
+    cwd = os.path.join('tools', 'aria2')
+    try:
+        with request.urlopen("https://trackerslist.com/best_aria2.txt") as url:
+            trackers = url.read().decode()
+    except error.URLError:
+        print("Unable to set torrent trackerslist")
+        trackers = ''
+
     cmdC = fr'cd {cwd} &&' \
         r"aria2c --enable-rpc --rpc-listen-port=6800 -D " \
         fr"-d {OUTPUT_DIR} " \
@@ -42,9 +47,8 @@ def signal_handler(sig, frame):
 
 
 if __name__ == "__main__":
-    # On Windows calling this function is necessary.
     multiprocessing.freeze_support()
-    
+
     ariangwkeP = Process(target=run_ariangwke)
     aria2cP = Process(target=run_aria2c)
 
