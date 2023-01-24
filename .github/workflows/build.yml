@@ -40,9 +40,7 @@ jobs:
       run: pyinstaller ocaria2.spec
 
     - name: 7z output files
-      uses: edgarrc/action-7z@v1
-      with:
-        args: 7z a -t7z -mx=9 build.7z ./dist/
+      run: 7z a -t7z -mx=9 build.7z ./dist/
   
     - name: Upload artifacts
       uses: actions/upload-artifact@v3
