@@ -2,9 +2,34 @@ import multiprocessing
 import signal
 import subprocess
 import os
+import functools
+from enum import Enum
 from multiprocessing import Process
 from urllib import request
 from urllib import error
+
+
+class toolTypeUI(Enum):
+    NOTFOUND = '-1'
+    ARIANGWKE = 'AriaNg'
+    ARIANNATIVE = 'AriaNg Native'
+
+
+def checkFontend():
+    if os.path.exists('tools/AriaNgWke/AriaNg.exe'):
+        print("AriaNgWke not found")
+        return toolTypeUI.ARIANGWKE
+    elif os.path.exists('tools/AriaNgNative/AriaNg Native.exe'):
+        print("AriaNgNative not found")
+        return toolTypeUI.ARIANNATIVE
+    else:
+        return toolTypeUI.NOTFOUND
+
+
+def run_arianative():
+    print("ariangnative")
+    cwd = os.path.join('tools', 'AriaNgNative')
+    subprocess.Popen(["AriaNg Native"], cwd=cwd, shell=True)
 
 
 def run_ariangwke():
@@ -38,26 +63,38 @@ def run_aria2c():
         r"--user-agent=Transmission/2.77 --peer-agent=Transmission/2.77 " \
         r"--peer-id-prefix=-TR2770- " \
         r"--split=20 "
-    os.system(cmdC)
+    try:
+        os.system(cmdC)
+    except KeyboardInterrupt:
+        print("Kill by user")
 
 
-def signal_handler(sig, frame):
-    os.system("taskkill /F /IM AriaNg.exe")
-    print("AriaNg stopped")
+def signal_handler(r, signum, frame):
+    if r == toolTypeUI.ARIANNATIVE:
+        print('No need to force kill '+r.value)
+        return
+    os.system(fr"taskkill /F /IM AriaNg Native.exe")
+    print(f"{r.value} stopped")
 
 
 if __name__ == "__main__":
     multiprocessing.freeze_support()
 
-    ariangwkeP = Process(target=run_ariangwke)
     aria2cP = Process(target=run_aria2c)
-
-    # starting process
     aria2cP.start()
-    ariangwkeP.start()
 
-    signal.signal(signal.SIGINT, signal_handler)
+    r = checkFontend()
+    signal.signal(signal.SIGINT, functools.partial(signal_handler, r))
 
-    # joining for end
+    if r == toolTypeUI.ARIANGWKE:
+        ariangwkeP = Process(target=run_ariangwke)
+        ariangwkeP.start()
+        ariangwkeP.join()
+    elif r == toolTypeUI.ARIANNATIVE:
+        ariangnativeP = Process(target=run_arianative)
+        ariangnativeP.start()
+        ariangnativeP.join()
+    else:
+        raise Exception("No fontend ui found")
+
     aria2cP.join()
-    ariangwkeP.join()
