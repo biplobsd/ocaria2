@@ -7,16 +7,36 @@ on:
 
 jobs:
   Bulid:
-    name: Build ${{ matrix.name }}
+    name: Build ${{ matrix.name }} ${{matrix.arch}}
     strategy:
-      max-parallel: 2
+      max-parallel: 6
       fail-fast: false
       matrix:
         include:
-          - arch: 'x86'
+          - name: 'Ariangwke'
+            arch: 'x86'
             platfromType: 0
-          - arch: 'x64'
+            ui: 0
+          - name: 'Ariangwke'
+            arch: 'x64'
             platfromType: 1
+            ui: 0
+          - name: 'AriangNative'
+            arch: 'x86'
+            platfromType: 0
+            ui: 1
+          - name: 'AriangNative'
+            arch: 'x64'
+            platfromType: 1
+            ui: 1
+          - name: 'Ariang'
+            arch: 'x86'
+            platfromType: 0
+            ui: 2
+          - name: 'Ariang'
+            arch: 'x64'
+            platfromType: 1
+            ui: 2
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
@@ -36,7 +56,7 @@ jobs:
     - name: Get dependencies aria2 and ariangwke
       run: python3 .\.ci\dependency.py ${{ matrix.platfromType }}
     
-    - name: Build with pyinstaller for ${{matrix.arch}}
+    - name: Build with pyinstaller for ${{ matrix.name }} ${{matrix.arch}}
       run: pyinstaller ocaria2.spec
 
     - name: 7z output files
@@ -45,7 +65,7 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: package_windows_${{ matrix.arch }}
+        name: package_windows_${{ matrix.name }}_${{ matrix.arch }}
         path: ./build.7z   
     
     
