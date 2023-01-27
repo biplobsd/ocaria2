@@ -54,7 +54,7 @@ jobs:
           pip install pyunpack patool requests
     
     - name: Get dependencies aria2 and ariangwke
-      run: python3 .\.ci\dependency.py ${{ matrix.platfromType }}
+      run: python3 .\.ci\dependency.py ${{ matrix.platfromType }} ${{ matrix.ui }}
     
     - name: Build with pyinstaller for ${{ matrix.name }} ${{matrix.arch}}
       run: pyinstaller ocaria2.spec
