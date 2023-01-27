@@ -45,9 +45,6 @@ exe = EXE(
 
 ## move dependency
 import shutil,os
-toolsAria2='dist/tools/aria2'
-if not os.path.exists(toolsAria2):
-    shutil.copytree('aria2', toolsAria2)
-toolsAriaNgWke='dist/tools/AriaNgWke'
-if not os.path.exists(toolsAriaNgWke):
-    shutil.copytree('AriaNgWke', toolsAriaNgWke)
+tools='dist/tools'
+if not os.path.exists(tools):
+    shutil.copytree('tools', tools)
