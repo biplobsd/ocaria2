@@ -51,21 +51,21 @@ jobs:
           python -m pip install --upgrade pip
           pip install --upgrade setuptools wheel
           pip install git+https://github.com/pyinstaller/pyinstaller.git
-          pip install pyunpack patool requests
+          pip install pyunpack patool coloredlogs
     
-    - name: Get dependencies aria2 and ariangwke
+    - name: Get dependencies aria2 and ${{ matrix.name }}
       run: python3 .\.ci\dependency.py ${{ matrix.platfromType }} ${{ matrix.ui }}
     
     - name: Build with pyinstaller for ${{ matrix.name }} ${{matrix.arch}}
       run: pyinstaller ocaria2.spec
 
     - name: 7z output files
-      run: 7z a -t7z -mx=9 build.7z ./dist/
+      run: cd ./dist/;7z a -t7z -mx=9 ocaria2-debug_windows_${{ matrix.name }}_${{ matrix.arch }}.7z .
   
     - name: Upload artifacts
       uses: actions/upload-artifact@v3
       with:
         name: package_windows_${{ matrix.name }}_${{ matrix.arch }}
-        path: ./build.7z   
+        path: ./dist/ocaria2-debug_windows_${{ matrix.name }}_${{ matrix.arch }}.7z 
     
     
