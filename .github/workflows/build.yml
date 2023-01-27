@@ -51,7 +51,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install --upgrade setuptools wheel
           pip install git+https://github.com/pyinstaller/pyinstaller.git
-          pip install pyunpack patool coloredlogs
+          pip install pyunpack patool requests coloredlogs
     
     - name: Get dependencies aria2 and ${{ matrix.name }}
       run: python3 .\.ci\dependency.py ${{ matrix.platfromType }} ${{ matrix.ui }}
