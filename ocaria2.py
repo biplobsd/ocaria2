@@ -3,11 +3,17 @@ import signal
 import subprocess
 import os
 import functools
+import logging
+import coloredlogs
 from enum import Enum
 from multiprocessing import Process
 from urllib import request
 from urllib import error
 
+logger = logging.getLogger(__name__)
+
+coloredlogs.install(level='DEBUG')
+coloredlogs.install(level='DEBUG', logger=logger)
 
 class toolTypeUI(Enum):
     NOTFOUND = '-1'
@@ -17,17 +23,17 @@ class toolTypeUI(Enum):
 
 def checkFontend():
     if os.path.exists('tools/AriaNgWke/AriaNg.exe'):
-        print("AriaNgWke not found")
+        logging.info("AriaNgWke not found")
         return toolTypeUI.ARIANGWKE
     elif os.path.exists('tools/AriaNgNative/AriaNg Native.exe'):
-        print("AriaNgNative not found")
+        logging.info("AriaNgNative not found")
         return toolTypeUI.ARIANNATIVE
     else:
         return toolTypeUI.NOTFOUND
 
 
 def run_arianative():
-    print("ariangnative")
+    logging.info("ariangnative")
     cwd = os.path.join('tools', 'AriaNgNative')
     subprocess.Popen(["AriaNg Native"], cwd=cwd, shell=True)
 
@@ -44,7 +50,7 @@ def run_aria2c():
         with request.urlopen("https://trackerslist.com/best_aria2.txt") as url:
             trackers = url.read().decode()
     except error.URLError:
-        print("Unable to set torrent trackerslist")
+        logging.info("Unable to set torrent trackerslist")
         trackers = ''
 
     cmdC = fr'cd {cwd} &&' \
@@ -66,15 +72,15 @@ def run_aria2c():
     try:
         os.system(cmdC)
     except KeyboardInterrupt:
-        print("Kill by user")
+        logging.info("Kill by user")
 
 
 def signal_handler(r, signum, frame):
     if r == toolTypeUI.ARIANNATIVE:
-        print('No need to force kill '+r.value)
+        logging.info('No need to force kill '+r.value)
         return
     os.system(fr"taskkill /F /IM AriaNg Native.exe")
-    print(f"{r.value} stopped")
+    logging.info(f"{r.value} stopped")
 
 
 if __name__ == "__main__":
