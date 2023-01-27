@@ -35,7 +35,7 @@ def findPackageR(id_repo, p_name, tag_name=False, all_=False):
                 rawData['assets'] = f
                 return f['browser_download_url'] if not all_ else rawData
     raise Exception(
-        "not found or maybe api changed!\n Try again with Change packages name")
+        f"{id_repo}/{p_name} Not found or maybe api changed!\n Try again with Change packages name")
 
 
 def isNotAvaCheck():
@@ -94,7 +94,7 @@ def downloadAriangwke(isx64=True):
 
 def downloadAriangNative(isx64=True):
     fileName = 'ariangnative.7z'
-    pType = '64' if isx64 else '32'
+    pType = '64' if isx64 else '86'
     pUrl = findPackageR('mayswind/AriaNg-Native', f'-Windows-x{pType}.7z')
     print(pUrl)
     print('ariang native Downloading...')
