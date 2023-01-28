@@ -25,7 +25,7 @@ class toolType(Enum):
 
 
 def findPackageR(id_repo, p_name, tag_name=False, all_=False):
-    for _ in range(2):
+    for _ in range(5):
         getData = requests.get(f"https://api.github.com/repos/{id_repo}/releases")
         if getData.ok:
             try:
