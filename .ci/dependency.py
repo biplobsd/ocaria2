@@ -25,17 +25,23 @@ class toolType(Enum):
 
 
 def findPackageR(id_repo, p_name, tag_name=False, all_=False):
-    for rawData in requests.get(f"https://api.github.com/repos/{id_repo}/releases").json():
-        if tag_name:
-            if rawData['tag_name'] != tag_name:
-                continue
+    for _ in range(2):
+        getData = requests.get(f"https://api.github.com/repos/{id_repo}/releases")
+        if getData.ok:
+            try:
+                for rawData in getData.json():
+                    if tag_name:
+                        if rawData['tag_name'] != tag_name:
+                            continue
 
-        for f in rawData['assets']:
-            if p_name == f['browser_download_url'][-len(p_name):]:
-                rawData['assets'] = f
-                return f['browser_download_url'] if not all_ else rawData
-    raise Exception(
-        f"{id_repo}/{p_name} Not found or maybe api changed!\n Try again with Change packages name")
+                    for f in rawData['assets']:
+                        if p_name == f['browser_download_url'][-len(p_name):]:
+                            rawData['assets'] = f
+                            return f['browser_download_url'] if not all_ else rawData
+            except:
+                continue
+            raise Exception(
+                f"{id_repo}/{p_name} Not found or maybe api changed!\n Try again with Change packages name")
 
 
 def isNotAvaCheck():
