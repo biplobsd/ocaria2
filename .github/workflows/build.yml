@@ -60,12 +60,14 @@ jobs:
       run: pyinstaller ocaria2.spec
 
     - name: 7z output files
-      run: cd ./dist/;7z a -t7z -mx=9 ocaria2-debug_windows_${{ matrix.name }}_${{ matrix.arch }}.7z .
+      run: |
+        ren dist ocaria2
+        7z a -t7z -mx=9 ocaria2-debug_windows_${{ matrix.name }}_${{ matrix.arch }}.7z ./ocaria2
   
     - name: Upload artifacts
       uses: actions/upload-artifact@v3
       with:
         name: package_windows_${{ matrix.name }}_${{ matrix.arch }}
-        path: ./dist/ocaria2-debug_windows_${{ matrix.name }}_${{ matrix.arch }}.7z 
+        path: ./ocaria2-debug_windows_${{ matrix.name }}_${{ matrix.arch }}.7z 
     
     
